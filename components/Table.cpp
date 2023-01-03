@@ -24,7 +24,6 @@ Table::Table(const Point &p1, const Point &p2, const Point &p3, const Point &p4,
     points[3].y = p4.y - dif;
 
     sides[0] = Line(points[0], points[1]);
-    std::cout << "sides[0] = " << sides[0].getA() << " " << sides[0].getB() << " " << sides[0].getC() << std::endl;
     sides[1] = Line(points[1], points[2]);
     sides[2] = Line(points[2], points[3]);
     sides[3] = Line(points[3], points[0]);
@@ -143,15 +142,9 @@ Point Table::impact(double power, const Point &direction) {
             
             uint8_t sideIndex = findSideOfImpactIndex(newPosition);
             Line cross(newPosition, directionVector);
-            std::cout << "Cross: " << cross.getA() << " " << cross.getB() << " " << cross.getC() << std::endl;
-            double x = (cross.getB()*sides[sideIndex].getC() - sides[sideIndex].getB() * cross.getC()) / (cross.getA() * sides[3].getB() - sides[3].getA() * cross.getB());
-            std::cout << "ooga" << sides[sideIndex].getB() * cross.getC() << std::endl;
-            double y = (cross.getC()*sides[sideIndex].getA() - sides[3].getC()*cross.getA()) / (cross.getA() * sides[sideIndex].getB() - sides[sideIndex].getA()*cross.getB());
-        
-            std::cout << "Cross: " << x << " " << y << std::endl;
-
-            // Point impact = findPointOfImpact(ball.getPosition(), direction, sideIndex);
-            // std::cout << "Impact point: " << impact.x << " " << impact.y << std::endl;        
+            Point impactPoint = cross.intersection(sides[sideIndex]);
+            std::cout << "Ball bounces off at: " << impactPoint.x << " " << impactPoint.y << std::endl;        
+            newPosition = symmetric(impactPoint, sides[sideIndex]);
             getchar();    
         }
     }
@@ -188,36 +181,6 @@ uint8_t Table::findSideOfImpactIndex(const Point &direction) {
     }
 
     return -1;
-}
-
-Point Table::findPointOfImpact(const Point &curr_point, const Point &direction, uint8_t sideIndex) {
-    
-    Line line(ball.getPosition(), direction);
-
-    double x = (line.getB()*sides[sideIndex].getC() - sides[sideIndex].getB() * line.getC()) / (line.getA() * sides[3].getB() - sides[3].getA() * line.getB());
-    double y = (line.getC()*sides[sideIndex].getA() - sides[3].getC()*line.getA()) / (line.getA() * sides[sideIndex].getB() - sides[sideIndex].getA()*line.getB());
-
-    return Point(x, y);
-}
-
-Point Table::findSymmetric(const Point &direction, uint8_t sideIndex) {
-    Line side = sides[sideIndex];
-
-    double x = 2 * (-side.getB() *
-                    ((-side.getB() * side.getC() +
-                      side.getA() * side.getB() * direction.x -
-                      pow(side.getA(), 2) * direction.y) /
-                         (-pow(side.getA(), 2) - pow(side.getA(), 2)) -
-                     side.getC()) /
-                    side.getA()) -
-               direction.x;
-    double y =
-        2 * ((side.getB() * side.getC() + side.getA() +
-              side.getB() * direction.x - pow(side.getA(), 2) * direction.y) /
-             (-pow(side.getA(), 2) - pow(side.getB(), 2))) -
-        direction.y;
-
-    return Point(x, y);
 }
 
 // finish the function

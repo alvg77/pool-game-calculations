@@ -30,6 +30,19 @@ bool Line::is_orthogonal(const Line& other) const {
     return ((-this->B) * this->A + other.A * (-other.B)) == 0;
 }
 
+Point Line::intersection(const Line& other) const {
+    double x = (this->B * other.C - other.B * this->C) / (this->A * other.B - other.A * this->B);
+    double y = (this->C * other.A - other.C * this->A) / (this->A * other.B - other.A * this->B);
+    
+    if (x == -0) {
+        x = 0;
+    } else if (y == -0) {
+        y = 0;
+    } 
+
+    return Point(x, y);
+}
+
 Vector Line::colinear() const { return Vector(-this->B, this->A); }
 
 Vector Line::orthogonal() const { return Vector(this->A, this->B); }

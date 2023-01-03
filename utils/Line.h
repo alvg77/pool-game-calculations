@@ -2,6 +2,7 @@
 #define LINE_H
 
 #include "Vector.h"
+#include "Point.h"
 
 class Line {
     double A, B, C;
@@ -13,6 +14,8 @@ class Line {
     Line(const Line& other);
     bool are_parallel(const Line& other) const;
     bool is_orthogonal(const Line& other) const;
+
+    Point intersection(const Line& other) const;
 
     double getA() const;
     double getB() const;

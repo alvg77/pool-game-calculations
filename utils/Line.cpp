@@ -41,6 +41,19 @@ Line Line::orthogonal(const Point p) const {
     return Line(p, this->orthogonal());
 }
 
+Point Line::intersection(const Line& other) const {
+    double x = (this->B * other.C - other.B * this->C) / (this->A * other.B - other.A * this->B);
+    double y = (this->C * other.A - other.C * this->A) / (this->A * other.B - other.A * this->B);
+    
+    if (x == -0) {
+        x = 0;
+    } else if (y == -0) {
+        y = 0;
+    } 
+
+    return Point(x, y);
+}
+
 double Line::getA() const {
     return A;
 }

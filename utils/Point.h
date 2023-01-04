@@ -14,6 +14,6 @@ struct Point {
 };
 
 double distance(const Point &p1, const Point &p2);
-// Point symmetric(const Point &p1, const Line &l); 
+Point symmetric(const Point &p1, const Line &l);
 
 #endif

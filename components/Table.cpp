@@ -9,20 +9,18 @@
 Table::Table(const Point &p1, const Point &p2, const Point &p3, const Point &p4,
              const Point &startingPosition, double radius)
     : startingPosition(startingPosition), ball(startingPosition, radius) {
-    
-    double dif = (ball.getRadius() * sqrt(2));
 
-    points[0].x = p1.x + dif;
-    points[0].y = p1.y + dif;
+    points[0].x = p1.x + radius;
+    points[0].y = p1.y + radius;
 
-    points[1].x = p2.x - dif;
-    points[1].y = p2.y + dif;
+    points[1].x = p2.x - radius;
+    points[1].y = p2.y + radius;
 
-    points[2].x = p3.x - dif; 
-    points[2].y = p3.y - dif;
+    points[2].x = p3.x - radius;
+    points[2].y = p3.y - radius;
 
-    points[3].x = p4.x + dif;
-    points[3].y = p4.y - dif;
+    points[3].x = p4.x + radius;
+    points[3].y = p4.y - radius;
 
     sides[0] = Line(points[0], points[1]);
     sides[1] = Line(points[1], points[2]);
@@ -42,19 +40,19 @@ Table::Table(const Point &p1, const Point &p2, const Point &p3, const Point &p4,
              const Ball &ball)
     : startingPosition(ball.getPosition()), ball(ball) {
     
-    double dif = (ball.getRadius() * sqrt(2));
+    double radius = ball.getRadius();
 
-    points[0].x = p1.x + dif;
-    points[0].y = p1.y + dif;
+    points[0].x = p1.x + radius;
+    points[0].y = p1.y + radius;
 
-    points[1].x = p2.x - dif;
-    points[1].y = p2.y + dif;
+    points[1].x = p2.x - radius;
+    points[1].y = p2.y + radius;
 
-    points[2].x = p3.x - dif; 
-    points[2].y = p3.y - dif;
+    points[2].x = p3.x - radius;
+    points[2].y = p3.y - radius;
 
-    points[3].x = p4.x + dif;
-    points[3].y = p4.y - dif;
+    points[3].x = p4.x + radius;
+    points[3].y = p4.y - radius;
 
     sides[0] = Line(points[0], points[1]);
     sides[1] = Line(points[1], points[2]);
@@ -142,11 +140,10 @@ Point Table::impact(double power, const Point &direction) {
             // }
             
             uint8_t sideIndex = findSideOfImpactIndex(newPosition);
-//            Line cross(newPosition, directionVector);
-//            Point impactPoint = cross.intersection(sides[sideIndex]);
-//            std::cout << "Ball bounces off at: " << impactPoint.x << " " << impactPoint.y << std::endl;
-//            newPosition = symmetric(impactPoint, sides[sideIndex]);
-//            getchar();
+            Line cross(newPosition, directionVector);
+            Point impactPoint = cross.intersection(sides[sideIndex]);
+            std::cout << "Ball bounces off at: " << impactPoint.x << " " << impactPoint.y << std::endl;
+            newPosition = symmetric(newPosition, sides[sideIndex]);
         }
     }
 
@@ -189,10 +186,12 @@ bool Table::compareDoubles(double a, double b) {
     return std::abs(a - b) < 0.0000001;
 }
 
-//Point symmetric(const Point &p1, const Line &l) {
-//    Vector orthogonal = l.orthogonal();
-//    Line orthLine (p1, orthogonal);
-//    Point intersection = l.intersection(orthLine);
-//
-//    return Point(2 * intersection.x - p1.x, 2 * intersection.y - p1.y);
-//}
+Point symmetric(const Point &p1, const Line &l) {
+    Vector orthogonal = l.orthogonal();
+    Line orthLine (p1, orthogonal);
+    Point intersection = l.intersection(orthLine);
+
+    std::cout << "Intersection: " << intersection.x << " " << intersection.y << std::endl;
+
+    return Point(2 * intersection.x - p1.x, 2 * intersection.y - p1.y);
+}

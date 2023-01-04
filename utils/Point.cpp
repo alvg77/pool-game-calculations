@@ -18,3 +18,14 @@ Line Test() {
 
     return Line(p1, p2);
 }
+
+std::ostream &operator<<(std::ostream &os, const Point &p) {
+    os << "(" << p.x << ", " << p.y << ")";
+    return os;
+}
+
+std::istream &operator>>(std::istream &is, Point &p) {
+    is >> p.x;
+    is >> p.y;
+    return is;
+}

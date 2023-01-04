@@ -1,4 +1,6 @@
-#include "Game.h"
+#include <iostream>
+#include "components/Table.h"
+
 
 int main() {
     Table t (
@@ -9,8 +11,8 @@ int main() {
         Point(300, 60),
         0
     );
-    
-    Point p = t.impact(3, Point(250, 30)); 
+
+    Point p = t.impact(3, Point(250, 30));
     std::cout << p.x << " " << p.y << std::endl;
     return 0;
 }

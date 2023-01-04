@@ -1,6 +1,6 @@
 #include "Line.h"
-
-#include <iostream>
+#include "Point.h"
+#include "Vector.h"
 
 Line::Line(const Point& p, const Vector& v) {
     this->A = v.y;
@@ -16,7 +16,7 @@ Line::Line(const Point& p1, const Point& p2) {
     this->C = p1.y * v.x - p1.x * v.y;
 }
 
-Line::Line(const Line& other) 
+Line::Line(const Line &other)
     : A(other.A), B(other.B), C(other.C)
 {}
 
@@ -28,19 +28,6 @@ bool Line::are_parallel(const Line& other) const {
 
 bool Line::is_orthogonal(const Line& other) const {
     return ((-this->B) * this->A + other.A * (-other.B)) == 0;
-}
-
-Point Line::intersection(const Line& other) const {
-    double x = (this->B * other.C - other.B * this->C) / (this->A * other.B - other.A * this->B);
-    double y = (this->C * other.A - other.C * this->A) / (this->A * other.B - other.A * this->B);
-    
-    if (x == -0) {
-        x = 0;
-    } else if (y == -0) {
-        y = 0;
-    } 
-
-    return Point(x, y);
 }
 
 Vector Line::colinear() const { return Vector(-this->B, this->A); }
@@ -91,14 +78,14 @@ void Line::setC(double C) {
     this->C = C;
 }
 
-inline std::ostream& operator<<(std::ostream& out, const Line& l) {
-    out << l.A << "x + " << l.B << "y + " << l.C << " = 0 ";
-    return out;
-}
-
-inline std::istream& operator>>(std::istream& in, Line& l) {
-    in >> l.A;
-    in >> l.B;
-    in >> l.C;
-    return in;
-}
+//inline std::ostream& operator<<(std::ostream& out, const Line& l) {
+//    out << l.A << "x + " << l.B << "y + " << l.C << " = 0 ";
+//    return out;
+//}
+//
+//inline std::istream& operator>>(std::istream& in, Line& l) {
+//    in >> l.A;
+//    in >> l.B;
+//    in >> l.C;
+//    return in;
+//}

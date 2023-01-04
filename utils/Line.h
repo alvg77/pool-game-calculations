@@ -1,17 +1,20 @@
 #ifndef LINE_H
 #define LINE_H
 
+
+#include <ostream>
 #include "Vector.h"
-#include "Point.h"
 
 class Line {
     double A, B, C;
 
    public:
+
     Line(double A = 0, double B = 0, double C = 0) : A(A), B(B), C(C) {}
     Line(const Point& p, const Vector& v);
     Line(const Point& p1, const Point& p2);
     Line(const Line& other);
+
     bool are_parallel(const Line& other) const;
     bool is_orthogonal(const Line& other) const;
     Point intersection(const Line& other) const;

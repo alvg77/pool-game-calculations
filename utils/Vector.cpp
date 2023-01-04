@@ -1,7 +1,5 @@
 #include "Vector.h"
 
-#include <cmath>
-
 Vector::Vector(double x, double y) : x(x), y(y) {}
 
 Vector::Vector(const Point& p1, const Point& p2) {

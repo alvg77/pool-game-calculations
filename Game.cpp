@@ -1,8 +1,6 @@
 #include "Game.h"
 
-#include <string>
-
-Game::Game() :table(nullptr) {}
+Game::Game() : table(nullptr) {}
 
 Game::~Game() {
     delete table;

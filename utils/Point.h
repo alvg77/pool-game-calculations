@@ -1,9 +1,6 @@
 #ifndef POINT_H
 #define POINT_H
 
-#include <iostream>
-#include "Line.h"
-
 struct Point {
     double x;
     double y;
@@ -14,6 +11,5 @@ struct Point {
 };
 
 double distance(const Point &p1, const Point &p2);
-Point symmetric(const Point &p1, const Line &l);
 
 #endif

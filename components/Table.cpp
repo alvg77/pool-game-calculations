@@ -1,9 +1,10 @@
-#include "Table.h"
 
-#include <cmath>
+#include <stdexcept>
+#include <valarray>
 #include <iostream>
-
+#include "Table.h"
 #include "../utils/Triangle.h"
+#include "../utils/Vector.h"
 
 Table::Table(const Point &p1, const Point &p2, const Point &p3, const Point &p4,
              const Point &startingPosition, double radius)
@@ -141,11 +142,11 @@ Point Table::impact(double power, const Point &direction) {
             // }
             
             uint8_t sideIndex = findSideOfImpactIndex(newPosition);
-            Line cross(newPosition, directionVector);
-            Point impactPoint = cross.intersection(sides[sideIndex]);
-            std::cout << "Ball bounces off at: " << impactPoint.x << " " << impactPoint.y << std::endl;        
-            newPosition = symmetric(impactPoint, sides[sideIndex]);
-            getchar();    
+//            Line cross(newPosition, directionVector);
+//            Point impactPoint = cross.intersection(sides[sideIndex]);
+//            std::cout << "Ball bounces off at: " << impactPoint.x << " " << impactPoint.y << std::endl;
+//            newPosition = symmetric(impactPoint, sides[sideIndex]);
+//            getchar();
         }
     }
 
@@ -187,3 +188,11 @@ uint8_t Table::findSideOfImpactIndex(const Point &direction) {
 bool Table::compareDoubles(double a, double b) {
     return std::abs(a - b) < 0.0000001;
 }
+
+//Point symmetric(const Point &p1, const Line &l) {
+//    Vector orthogonal = l.orthogonal();
+//    Line orthLine (p1, orthogonal);
+//    Point intersection = l.intersection(orthLine);
+//
+//    return Point(2 * intersection.x - p1.x, 2 * intersection.y - p1.y);
+//}

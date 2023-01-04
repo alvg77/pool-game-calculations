@@ -2,11 +2,9 @@
 #define TABLE_H
 
 #include <cstdint>
-
-#include "../utils/Line.h"
-#include "../utils/Point.h"
-#include "../utils/Vector.h"
 #include "Ball.h"
+#include "../utils/Point.h"
+#include "../utils/Line.h"
 
 class Table {
    private:
@@ -35,5 +33,7 @@ class Table {
     ~Table();
     Point impact(double power, const Point& direction);
 };
+
+Point symmetric(const Point &p1, const Line &l);
 
 #endif

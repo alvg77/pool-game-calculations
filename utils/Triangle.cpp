@@ -1,5 +1,5 @@
+#include <valarray>
 #include "Triangle.h"
-#include <cmath>
 
 Triangle::Triangle(Point p1, Point p2, Point p3) {
     points[0] = p1;

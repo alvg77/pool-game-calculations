@@ -1,7 +1,6 @@
 #include <iostream>
 #include "components/Table.h"
 
-
 int main() {
     Table t (
         Point(0, 0),

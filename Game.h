@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-class Table;
+#include "components/Table.h"
 
 class Game {
    private:

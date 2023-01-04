@@ -1,3 +1,6 @@
+#include <valarray>
+#include <ostream>
+#include <istream>
 #include "Vector.h"
 
 Vector::Vector(double x, double y) : x(x), y(y) {}

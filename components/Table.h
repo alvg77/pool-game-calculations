@@ -11,7 +11,7 @@ class Table {
    private:
     Ball ball;
     Point startingPosition;
-    std::vector<Point> points;
+    Point points[4];
     Line sides[4];
 
     double surface;

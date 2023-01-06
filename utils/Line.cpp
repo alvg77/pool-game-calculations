@@ -51,7 +51,7 @@ Line Line::orthogonal(const Point p) const {
 Point Line::intersection(const Line& other) const {
     double x = (this->B * other.C - other.B * this->C) / (this->A * other.B - other.A * this->B);
     double y = (this->C * other.A - other.C * this->A) / (this->A * other.B - other.A * this->B);
-    
+    std::cout << "x y" << x << " " << y << std::endl;
     if (x == -0) {
         x = 0;
     } else if (y == -0) {

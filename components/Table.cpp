@@ -149,6 +149,9 @@ void Table::impact(double power, const Point &direction) {
         Vector collisionVector = collision.first;
         Line collisionSide = collision.second;
         Point collisionPoint = Point(collisionVector.getX(), collisionVector.getY());
+
+        std::cout << "Collision vector: " << collisionVector.getX() << " " << collisionVector.getY() << std::endl;
+
         ball.setPosition(collisionPoint);
 
         if (isBallInHole()) {
@@ -181,36 +184,23 @@ bool Table::isBallInHole() {
 
 std::pair<Vector, Line> Table::findCollision(const Vector &directionVector) {
     Line crossLine(ball.getPosition(), directionVector);
-    std::vector<std::pair<Vector, Line>> vectors;
+    std::vector< std::pair<Vector, Line> > pairs;
 
-    for (auto i: sides) {
-        Vector v(crossLine.intersection(Line(ball.getPosition(), directionVector)), ball.getPosition());
-        if (!directionVector.is_opposite(v)) {
-            vectors.push_back(std::make_pair(v, i));
+    for (auto side: sides) {
+        Point intersection = crossLine.intersection(side);
+        Vector v(intersection, ball.getPosition());
+        if (!directionVector.is_opposite(v) && !std::isnan(intersection.x) && !std::isnan(intersection.y)) {
+            pairs.push_back(std::make_pair(v, side));
+        }
+    }
+    std::pair<Vector, Line> min = pairs[0];
+    for (auto p = pairs.begin() +1; p != pairs.end(); p++) {
+        if (p->first.length() < min.first.length()) {
+            min = *p;
         }
     }
 
-    if (vectors[0].first.length() < vectors[1].first.length()) {
-        return vectors[0];
-    }
-
-    return vectors[1];
-}
-
-uint8_t Table::findSideOfImpactIndex(const Point &direction) {
-
-
-    if (direction.x < points[0].x && direction.x < points[3].x) {
-        return 3;
-    } else if (direction.x > points[1].x && direction.x > points[2].x) {
-        return 1;
-    } else if (direction.y < points[0].y && direction.y < points[1].y) {
-        return 0;
-    } else if (direction.y > points[2].y && direction.y > points[3].y) {
-        return 2;
-    }
-
-    return -1;
+    return min;
 }
 
 // finish the function

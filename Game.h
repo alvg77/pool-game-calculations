@@ -5,9 +5,12 @@
 class Game {
    private:
     Table *table;
-    void initTable();    
+    void setTableCoords();
+    void setBallDiameter();
+    void setStartingBallPosition();
+    void hitBall();
+    void displayTableParams();
     void menu();
-    // void reset();
    public:
     Game();
     ~Game();

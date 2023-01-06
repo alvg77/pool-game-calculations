@@ -46,6 +46,15 @@ Vector Vector::multiply(double power) {
     return Vector(x * power, y * power);
 }
 
+double Vector::findAngle(const Vector &other) {
+    double cos = (this->dot_product(other)) / (this->length() * other.length());
+    return acos(cos);
+}
+
+bool Vector::is_opposite(const Vector &other) const {
+    return (this->x * other.x < 0) && (this->y * other.y < 0) && this->is_colinear(other);
+}
+
 // TODO - finds the area of a triangle given two vectors denoting two of its
 // sides
 int area(const Vector &v1, const Vector &v2) {

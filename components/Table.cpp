@@ -5,6 +5,21 @@
 #include "Table.h"
 #include "../utils/Triangle.h"
 #include "../utils/Vector.h"
+//h
+//void Table::findAngleWithOX(const Point &p1, const Point &p2) {
+//    Line ox (Point(0, 0), Point(1, 0));
+//    Line side (p1, p2);
+//    double angle = side.findAngle(ox);
+//
+//    sinA = sin(angle);
+//    cosA = cos(angle);
+//}
+//
+//Point Table::rotatePoint(const Point &p) {
+//    double x = p.x * cosA - p.y * sinA;
+//    double y = p.x * sinA + p.y * cosA;
+//    return Point(x, y)
+//}
 
 Table::Table(const Point &p1, const Point &p2, const Point &p3, const Point &p4,
              const Point &startingPosition, double radius)
@@ -113,46 +128,43 @@ bool Table::validateRectangle(const Point &p1, const Point &p2, const Point &p3,
     return AB == CD && BC == DA && AC == BD;
 }
 
-Point Table::impact(double power, const Point &direction) {
+void Table::impact(double power, const Point &direction) {
     
     if (power < 1 || power > 10) {
         throw std::invalid_argument("Invalid value for power provided");
     }
 
     Vector directionVector(direction, ball.getPosition());
+    directionVector = directionVector.multiply(power);
     // finish this
     std::cout << "Direction vector: " << directionVector.getX() << " " << directionVector.getY() << std::endl;
 
     Point newPosition = ball.getPosition();
-    newPosition.x += directionVector.getX() * power;
-    newPosition.y += directionVector.getY() * power;
 
+    newPosition.x += directionVector.getX();
+    newPosition.y += directionVector.getY();
 
-    if (isInTable(newPosition)) {
-        ball.setPosition(newPosition);
-        std::cout << "Ball is in table" << std::endl;
-    } else {
-        while (!isInTable(newPosition)) {
-            // if (isBallInHole()) {
-            //     ball.setPosition(startingPosition);
-            //     newPosition = startingPosition;
-            //     break;
-            // }
-            
-            uint8_t sideIndex = findSideOfImpactIndex(newPosition);
-            Line cross(newPosition, directionVector);
-            Point impactPoint = cross.intersection(sides[sideIndex]);
-            std::cout << "Ball bounces off at: " << impactPoint.x << " " << impactPoint.y << std::endl;
-            newPosition = symmetric(newPosition, sides[sideIndex]);
+    while (!isInTable(newPosition)) {
+        std::pair<Vector, Line> collision = findCollision(directionVector);
+        Vector collisionVector = collision.first;
+        Line collisionSide = collision.second;
+        Point collisionPoint = Point(collisionVector.getX(), collisionVector.getY());
+        ball.setPosition(collisionPoint);
+
+        if (isBallInHole()) {
+            ball.setPosition(startingPosition);
+            return;
         }
-    }
 
-    if (isBallInHole()) {
-        ball.setPosition(startingPosition);
-        newPosition = startingPosition;
+        std::cout << "Ball bounces off at: " << ball.getPosition() << " " << ball.getPosition() << std::endl;
+        newPosition = symmetric(newPosition, collisionSide);
+        directionVector = Vector(newPosition, ball.getPosition());
     }
+    ball.setPosition(newPosition);
+}
 
-    return newPosition;
+Point Table::getBallPosition() const {
+    return ball.getPosition();
 }
 
 bool Table::isBallInHole() {
@@ -167,7 +179,27 @@ bool Table::isBallInHole() {
     return count == 2;
 }
 
+std::pair<Vector, Line> Table::findCollision(const Vector &directionVector) {
+    Line crossLine(ball.getPosition(), directionVector);
+    std::vector<std::pair<Vector, Line>> vectors;
+
+    for (auto i: sides) {
+        Vector v(crossLine.intersection(Line(ball.getPosition(), directionVector)), ball.getPosition());
+        if (!directionVector.is_opposite(v)) {
+            vectors.push_back(std::make_pair(v, i));
+        }
+    }
+
+    if (vectors[0].first.length() < vectors[1].first.length()) {
+        return vectors[0];
+    }
+
+    return vectors[1];
+}
+
 uint8_t Table::findSideOfImpactIndex(const Point &direction) {
+
+
     if (direction.x < points[0].x && direction.x < points[3].x) {
         return 3;
     } else if (direction.x > points[1].x && direction.x > points[2].x) {

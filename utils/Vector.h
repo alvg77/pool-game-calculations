@@ -20,7 +20,8 @@ class Vector {
     double length() const;
     int dot_product(const Vector& other) const;
     Vector multiply(double power);
-
+    double findAngle(const Vector& other);
+    bool is_opposite(const Vector& other) const;
     double getX() const;
     double getY() const; 
 

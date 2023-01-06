@@ -11,7 +11,7 @@ int main() {
         5
     );
 
-    Point p = t.impact(2, Point(200, 20));
-    std::cout << p.x << " " << p.y << std::endl;
+    t.impact(2, Point(200, 20));
+    std::cout << t.getBallPosition().x << " " << t.getBallPosition().y << std::endl;
     return 0;
 }

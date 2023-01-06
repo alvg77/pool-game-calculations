@@ -31,6 +31,12 @@ bool Line::is_orthogonal(const Line& other) const {
     return ((-this->B) * this->A + other.A * (-other.B)) == 0;
 }
 
+double Line::findAngle(const Line &other) {
+    Vector v1(-this->B, this->A);
+    Vector v2(-other.B, other.A);
+    return v1.findAngle(v2);
+}
+
 Vector Line::colinear() const { return Vector(-this->B, this->A); }
 
 Vector Line::orthogonal() const { return Vector(this->A, this->B); }

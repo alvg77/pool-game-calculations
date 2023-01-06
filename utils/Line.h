@@ -33,6 +33,8 @@ class Line {
     Line parallel(const Point p) const;
     Line orthogonal(const Point p) const;
 
+    double findAngle(const Line &other);
+
     friend std::ostream& operator<<(std::ostream& out, const Line& l);
     friend std::istream& operator>>(std::istream& in, Line& l);
 };

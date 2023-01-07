@@ -6,7 +6,7 @@
 class Ball {
    private:
     Point position;
-    const double radius;
+    double radius;
 
    public:
     Ball();

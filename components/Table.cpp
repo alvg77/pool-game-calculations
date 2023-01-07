@@ -4,38 +4,62 @@
 #include <iostream>
 #include "Table.h"
 #include "../utils/Triangle.h"
-#include "../utils/Vector.h"
-//h
-//void Table::findAngleWithOX(const Point &p1, const Point &p2) {
-//    Line ox (Point(0, 0), Point(1, 0));
-//    Line side (p1, p2);
-//    double angle = side.findAngle(ox);
-//
-//    sinA = sin(angle);
-//    cosA = cos(angle);
-//}
-//
-//Point Table::rotatePoint(const Point &p) {
-//    double x = p.x * cosA - p.y * sinA;
-//    double y = p.x * sinA + p.y * cosA;
-//    return Point(x, y)
-//}
+#include "Ball.h"
+
+void Table::findAngleWithOX(const Point &p1, const Point &p2) {
+    Line ox (Point(0, 0), Point(1, 0));
+    Line side (p1, p2);
+
+    rotationPoint = side.intersection(ox);
+    cosA = side.findAngleCosine(ox);
+    sinA = sqrt(1 - cosA * cosA);
+}
+
+Point Table::rotatePoint(const Point &p) {
+        Point rotated (
+            cosA * (p.x - rotationPoint.x) + sinA * (p.y - rotationPoint.y) + rotationPoint.x, /* x */
+            -sinA * (p.x - rotationPoint.x) + cosA * (p.y - rotationPoint.y) + rotationPoint.y /* y */
+            );
+
+        return std::isnan(rotated.x) && std::isnan(rotated.y) ? p : rotated;
+}
+
+Point Table::retrievePoint(const Point &p) {
+    Point retrieved (
+        cosA * (p.x - rotationPoint.x) - sinA * (p.y - rotationPoint.y) + rotationPoint.x, /* x */
+        sinA * (p.x - rotationPoint.x) + cosA * (p.y - rotationPoint.y) + rotationPoint.y  /* y */
+        );
+
+    return std::isnan(retrieved.x) && std::isnan(retrieved.y) ? p : retrieved;
+}
 
 Table::Table(const Point &p1, const Point &p2, const Point &p3, const Point &p4,
-             const Point &startingPosition, double radius)
-    : startingPosition(startingPosition), ball(startingPosition, radius) {
+             const Point &startingPosition, double radius){
 
-    points[0].x = p1.x + radius;
-    points[0].y = p1.y + radius;
+    findAngleWithOX(p1, p2);
 
-    points[1].x = p2.x - radius;
-    points[1].y = p2.y + radius;
+    this->startingPosition = rotatePoint(startingPosition);
+    ball = Ball(this->startingPosition, radius);
+    std::cout << "Starting position" << this->startingPosition << std::endl;
+    points[0] = rotatePoint(p1);
+    points[0].x += radius;
+    points[0].y += radius;
+    std::cout << "Point 1" << points[0] << std::endl;
 
-    points[2].x = p3.x - radius;
-    points[2].y = p3.y - radius;
+    points[1] = rotatePoint(p2);
+    points[1].x -= radius;
+    points[1].y += radius;
+    std::cout << "Point 2" << points[1] << std::endl;
 
-    points[3].x = p4.x + radius;
-    points[3].y = p4.y - radius;
+    points[2] = rotatePoint(p3);
+    points[2].x -= radius;
+    points[2].y -= radius;
+    std::cout << "Point 3" << points[2] << std::endl;
+
+    points[3] = rotatePoint(p4);
+    points[3].x += radius;
+    points[3].y -= radius;
+    std::cout << "Point 4" << points[3] << std::endl;
 
     sides[0] = Line(points[0], points[1]);
     sides[1] = Line(points[1], points[2]);
@@ -46,38 +70,6 @@ Table::Table(const Point &p1, const Point &p2, const Point &p3, const Point &p4,
 
     if (!validateRectangle(p1, p2, p3, p4)) {
         throw std::invalid_argument("Table is not a rectangle with ratio 1:2");
-    } else if (!isInTable(ball.getPosition())) {
-        throw std::invalid_argument("Ball is not in table");
-    }
-}
-
-Table::Table(const Point &p1, const Point &p2, const Point &p3, const Point &p4,
-             const Ball &ball)
-    : startingPosition(ball.getPosition()), ball(ball) {
-    
-    double radius = ball.getRadius();
-
-    points[0].x = p1.x + radius;
-    points[0].y = p1.y + radius;
-
-    points[1].x = p2.x - radius;
-    points[1].y = p2.y + radius;
-
-    points[2].x = p3.x - radius;
-    points[2].y = p3.y - radius;
-
-    points[3].x = p4.x + radius;
-    points[3].y = p4.y - radius;
-
-    sides[0] = Line(points[0], points[1]);
-    sides[1] = Line(points[1], points[2]);
-    sides[2] = Line(points[2], points[3]);
-    sides[3] = Line(points[3], points[0]);
-
-    surface = floor(distance(points[0], points[1]) * distance(points[1], points[2]));
-    
-    if (!validateRectangle(p1, p2, p3, p4)) {
-        throw std::invalid_argument("Table is not a rectangle with ratio 2:1");
     } else if (!isInTable(ball.getPosition())) {
         throw std::invalid_argument("Ball is not in table");
     }
@@ -129,26 +121,31 @@ bool Table::validateRectangle(const Point &p1, const Point &p2, const Point &p3,
 }
 
 void Table::impact(double power, const Point &direction) {
-    
+
     if (power < 1 || power > 10) {
         throw std::invalid_argument("Invalid value for power provided");
     }
-
-    Vector directionVector(direction, ball.getPosition());
+    Point rotatedDirection = rotatePoint(direction);
+    std::cout << rotatedDirection << std::endl;
+    Vector directionVector(rotatedDirection, ball.getPosition());
     directionVector = directionVector.multiply(power);
-    // finish this
+
     std::cout << "Direction vector: " << directionVector.getX() << " " << directionVector.getY() << std::endl;
 
     Point newPosition = ball.getPosition();
 
+
+
     newPosition.x += directionVector.getX();
     newPosition.y += directionVector.getY();
+//    std::cout << "Ball position: " << ball.getPosition() << std::endl;
+//    std::cout << "New position: " << newPosition << std::endl;
 
     while (!isInTable(newPosition)) {
         std::pair<Vector, Line> collision = findCollision(directionVector);
         Vector collisionVector = collision.first;
         Line collisionSide = collision.second;
-        Point collisionPoint = Point(collisionVector.getX(), collisionVector.getY());
+        Point collisionPoint = Point(collisionVector.getX() + ball.getPosition().x, collisionVector.getY() + ball.getPosition().y);
 
         std::cout << "Collision vector: " << collisionVector.getX() << " " << collisionVector.getY() << std::endl;
 
@@ -156,10 +153,11 @@ void Table::impact(double power, const Point &direction) {
 
         if (isBallInHole()) {
             ball.setPosition(startingPosition);
+            std::cout << "Ball is in hole" << std::endl;
             return;
         }
 
-        std::cout << "Ball bounces off at: " << ball.getPosition() << " " << ball.getPosition() << std::endl;
+        std::cout << "Ball bounces off at: " << retrievePoint(ball.getPosition()) << std::endl;
         newPosition = symmetric(newPosition, collisionSide);
         directionVector = Vector(newPosition, ball.getPosition());
     }
@@ -173,8 +171,8 @@ Point Table::getBallPosition() const {
 bool Table::isBallInHole() {
     uint8_t count = 0;
     for (int i = 0; i < 4; i++) {
-        if (sides[i].getA() * ball.getPosition().x +
-            sides[i].getB() * ball.getPosition().y + sides[i].getC()) {
+        if (compareDoubles(sides[i].getA() * ball.getPosition().x +
+            sides[i].getB() * ball.getPosition().y + sides[i].getC(), 0)) {
             count++;
         }
     }
@@ -189,7 +187,7 @@ std::pair<Vector, Line> Table::findCollision(const Vector &directionVector) {
     for (auto side: sides) {
         Point intersection = crossLine.intersection(side);
         Vector v(intersection, ball.getPosition());
-        if (!directionVector.is_opposite(v) && !std::isnan(intersection.x) && !std::isnan(intersection.y)) {
+        if (!directionVector.is_opposite(v) && !std::isnan(intersection.x) && !std::isnan(intersection.y) && !v.is_null_vector()) {
             pairs.push_back(std::make_pair(v, side));
         }
     }

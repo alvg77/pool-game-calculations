@@ -31,10 +31,10 @@ bool Line::is_orthogonal(const Line& other) const {
     return ((-this->B) * this->A + other.A * (-other.B)) == 0;
 }
 
-double Line::findAngle(const Line &other) {
+double Line::findAngleCosine(const Line &other) {
     Vector v1(-this->B, this->A);
     Vector v2(-other.B, other.A);
-    return v1.findAngle(v2);
+    return v1.findAngleCosine(v2);
 }
 
 Vector Line::colinear() const { return Vector(-this->B, this->A); }
@@ -51,7 +51,7 @@ Line Line::orthogonal(const Point p) const {
 Point Line::intersection(const Line& other) const {
     double x = (this->B * other.C - other.B * this->C) / (this->A * other.B - other.A * this->B);
     double y = (this->C * other.A - other.C * this->A) / (this->A * other.B - other.A * this->B);
-    std::cout << "x y" << x << " " << y << std::endl;
+
     if (x == -0) {
         x = 0;
     } else if (y == -0) {

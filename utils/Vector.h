@@ -17,10 +17,11 @@ class Vector {
     Vector times_num(int num) const;
 
     bool is_colinear(const Vector& other) const;
+    bool is_null_vector() const;
     double length() const;
     int dot_product(const Vector& other) const;
     Vector multiply(double power);
-    double findAngle(const Vector& other);
+    double findAngleCosine(const Vector& other);
     bool is_opposite(const Vector& other) const;
     double getX() const;
     double getY() const; 

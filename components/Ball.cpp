@@ -1,5 +1,7 @@
 #include "Ball.h"
 
+Ball::Ball() {}
+
 Ball::Ball(const Point& startingPosition, double radius)
     : position(startingPosition), radius(radius) {}
 

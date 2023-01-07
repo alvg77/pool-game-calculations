@@ -34,9 +34,6 @@ class Line {
     Line orthogonal(const Point p) const;
 
     double findAngleCosine(const Line &other);
-
-    friend std::ostream& operator<<(std::ostream& out, const Line& l);
-    friend std::istream& operator>>(std::istream& in, Line& l);
 };
 
 #endif

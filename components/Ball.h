@@ -15,6 +15,7 @@ class Ball {
     Point getPosition() const;
     void setPosition(const Point &position);
     double getRadius() const;
+    void setRadius(double radius);
 };
 
 #endif

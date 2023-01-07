@@ -4,13 +4,15 @@
 
 class Game {
    private:
-    Table *table;
+    Table table;
     void setTableCoords();
     void setBallDiameter();
     void setStartingBallPosition();
+    void printTable();
     void hitBall();
-    void displayTableParams();
     void menu();
+    void resetBall();
+    void initTable();
    public:
     Game();
     ~Game();

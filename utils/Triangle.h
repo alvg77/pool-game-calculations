@@ -10,7 +10,6 @@ class Triangle {
     Triangle(Point p1, Point p2, Point p3);
     ~Triangle();
     double getSurface();
-    
 };
 
 #endif

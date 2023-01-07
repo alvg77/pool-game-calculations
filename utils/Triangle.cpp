@@ -9,6 +9,7 @@ Triangle::Triangle(Point p1, Point p2, Point p3) {
 
 Triangle::~Triangle() {}
 
+// get surface of triangle
 double Triangle::getSurface() {
     double side1 = distance(points[0], points[1]);
     double side2 = distance(points[1], points[2]);

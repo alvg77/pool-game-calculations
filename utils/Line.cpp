@@ -84,15 +84,3 @@ void Line::setB(double B) {
 void Line::setC(double C) {
     this->C = C;
 }
-
-//inline std::ostream& operator<<(std::ostream& out, const Line& l) {
-//    out << l.A << "x + " << l.B << "y + " << l.C << " = 0 ";
-//    return out;
-//}
-//
-//inline std::istream& operator>>(std::istream& in, Line& l) {
-//    in >> l.A;
-//    in >> l.B;
-//    in >> l.C;
-//    return in;
-//}

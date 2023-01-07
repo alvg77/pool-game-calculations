@@ -14,3 +14,7 @@ void Ball::setPosition(const Point &position) {
 }
 
 double Ball::getRadius() const { return radius; }
+
+void Ball::setRadius(double radius) {
+    this->radius = radius;
+}

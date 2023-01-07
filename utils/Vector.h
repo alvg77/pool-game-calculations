@@ -14,13 +14,11 @@ class Vector {
     Vector(const Point& p1, const Point& p2);
     ~Vector();
     Vector sum(const Vector& other) const;
-    Vector times_num(int num) const;
-
     bool is_colinear(const Vector& other) const;
     bool is_null_vector() const;
     double length() const;
     int dot_product(const Vector& other) const;
-    Vector multiply(double power);
+    void multiply(double power);
     double findAngleCosine(const Vector& other);
     bool is_opposite(const Vector& other) const;
     double getX() const;

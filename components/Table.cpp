@@ -311,13 +311,12 @@ void Table::setBallRadius(double radius) {
 
     points[0].x += difference;
     points[0].y += difference;
-    points[1].x += difference;
+    points[1].x -= difference;
     points[1].y += difference;
-    points[2].x += difference;
-    points[2].y += difference;
+    points[2].x -= difference;
+    points[2].y -= difference;
     points[3].x += difference;
-    points[3].y += difference;
-
+    points[3].y -= difference;
     findSides();
 
     // if the resized field is invalid, we reset the old one

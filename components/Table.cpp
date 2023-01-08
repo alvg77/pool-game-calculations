@@ -265,6 +265,10 @@ Point symmetric(const Point &p1, const Line &l) {
 
 // we set new coordinates
 void Table::setCoordinates(std::vector<Point> points) {
+    if(!isRectangle(points)) {
+        throw std::invalid_argument("Invalid coordinates provided");
+    }
+
     // save the previous ones in case the new ones are invalid
     std::vector<Point> prevPoints(this->points);
     std::vector<Line> prevSides(this->sides);
@@ -276,7 +280,7 @@ void Table::setCoordinates(std::vector<Point> points) {
     surface = distance(this->points[0], this->points[1]) * distance(this->points[1], this->points[2]);
 
     // if the new coordinates are invalid, we reset the old ones
-    if (!isInTable(ball.getPosition())) {
+    if (!isInTable(ball.getPosition()) || !isInTable(startingPosition)) {
         this->points = prevPoints;
         this->sides = prevSides;
         throw std::invalid_argument("Cannot change coordinates! Ball is not in table");

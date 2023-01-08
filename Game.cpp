@@ -48,7 +48,7 @@ void Game::start() {
             }
         } catch (const std::exception &e) {
             std::cout << e.what() << std::endl;
-            std::cin.ignore();
+            std::cin.get();
         }
         system("clear");
     }
@@ -90,7 +90,7 @@ bool Game::simple() {
         std::cin >> smaller;
         std::cin >> ballStartingPosition;
         std::cin >> ballDiameter;
-
+        std::cin.ignore();
         std::vector<Point> points;
         points.push_back(first);
         points.push_back(Point(first.x + bigger, first.y));
@@ -142,7 +142,7 @@ void Game::setTableCoords() {
         std::cin >> p;
         points.push_back(p);
     }
-
+    std::cin.ignore();
     table.setCoordinates(points);
 }
 

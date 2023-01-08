@@ -158,6 +158,7 @@ bool Table::isRectangle(const std::vector<Point> points) const {
     return AB == CD && BC == DA && AC == BD;
 }
 
+
 void Table::hitBall(double power, const Point &direction) {
 
     if (power < 1 || power > 10) {
@@ -310,12 +311,12 @@ void Table::setBallRadius(double radius) {
 
     points[0].x += difference;
     points[0].y += difference;
-    points[1].x -= difference;
+    points[1].x += difference;
     points[1].y += difference;
-    points[2].x -= difference;
-    points[2].y -= difference;
+    points[2].x += difference;
+    points[2].y += difference;
     points[3].x += difference;
-    points[3].y -= difference;
+    points[3].y += difference;
 
     findSides();
 

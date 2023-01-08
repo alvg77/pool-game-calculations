@@ -31,6 +31,8 @@ bool Line::is_orthogonal(const Line& other) const {
     return ((-this->B) * this->A + other.A * (-other.B)) == 0;
 }
 
+
+// find the cosine of the angle between the vectors
 double Line::findAngleCosine(const Line &other) {
     Vector v1(-this->B, this->A);
     Vector v2(-other.B, other.A);
@@ -48,6 +50,7 @@ Line Line::orthogonal(const Point p) const {
     return Line(p, this->orthogonal());
 }
 
+// find the point of intersection between two lines
 Point Line::intersection(const Line& other) const {
     double x = (this->B * other.C - other.B * this->C) / (this->A * other.B - other.A * this->B);
     double y = (this->C * other.A - other.C * this->A) / (this->A * other.B - other.A * this->B);

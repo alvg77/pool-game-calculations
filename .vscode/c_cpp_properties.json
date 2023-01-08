@@ -1,16 +1,42 @@
-{
-    "configurations": [
-        {
-            "name": "Linux",
-            "includePath": [
-                "${workspaceFolder}/**"
-            ],
-            "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "gnu17",
-            "cppStandard": "gnu++14",
-            "intelliSenseMode": "linux-gcc-x64"
-        }
-    ],
-    "version": 4
+// we find the collision point
+    std::pair<Vector, Line> Table::findCollision(const Vector &directionVector) const {
+    // we create the opposite vector of the direction vector
+    Vector opposite (-directionVector.getX(), -directionVector.getY());
+    // we create a line from the ball's position and the direction of the hit
+    Line crossLine(ball.getPosition(), directionVector);
+    std::vector<std::pair<Vector, Line> > pairs;
+
+    for (auto side: sides) {
+    // we find the intersection of this line with the sides (lines) of the table
+    Point intersection = crossLine.intersection(side);
+    // we find the vector to every intersection point
+    Vector v(intersection, ball.getPosition());
+    // we get the opposite vector to the side
+    Vector oppositeToSide (-v.getX(), -v.getY());
+    // if we try to bounce the ball into a side, where the ball already is, we ignore it, as it is not a valid move
+    if (compareDoubles(opposite.length(), oppositeToSide.length())) {
+
+    pairs.push_back(std::make_pair(v, side));
+    break;
+}
+
+// if the vector is in the opposite direction of the direction of the hit, then we ignore it
+// the crossLine might be parallel to some of the rectangle lines
+// meaning that we are going to receive a nan value
+// we ignore this case too
+if (!directionVector.is_opposite(v) && !std::isnan(intersection.x) && !std::isnan(intersection.y) &&
+!v.is_null_vector()) {
+pairs.push_back(std::make_pair(v, side));
+}
+}
+std::pair<Vector, Line> min = pairs[0];
+for (auto p = pairs.begin() + 1; p != pairs.end(); p++) {
+// we find the vector with the smallest length
+// this is the vector that describes the movement of the ball from its current position to the point of collision
+if (p->first.length() < min.first.length()) {
+min = *p;
+}
+}
+
+return min;
 }

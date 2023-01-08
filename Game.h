@@ -13,6 +13,8 @@ class Game {
     void menu();
     void resetBall();
     void initTable();
+    bool simple();
+    bool complex();
    public:
     Game();
     ~Game();

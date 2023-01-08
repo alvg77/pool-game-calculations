@@ -108,6 +108,9 @@ Table::Table(std::vector<Point> points, const Point &startingPosition, double ra
     }
     // we find the sides of the rectangle (the sides are lines)
     findSides();
+    if (isInHole(this->startingPosition)) {
+        throw std::invalid_argument("Ball cannot start in hole");
+    }
 }
 
 Table::~Table() {}
@@ -119,11 +122,13 @@ bool Table::isUninitialized() const {
 
 bool Table::isInTable(const Point &currentPosition) const {
     double sum = 0;
+
     // in order to find whether the ball is in the table we need to find the sum of the triangles formed by the ball's center and the sides of the table
     // then we compare the sum of the triangle areas to the area of the table
     for (int i = 0; i < 4; i++) {
         sum += Triangle(points[i], points[(i + 1) % 4], currentPosition).getSurface();
     }
+
     return compareDoubles(surface, sum);
 }
 
@@ -183,7 +188,7 @@ void Table::hitBall(double power, const Point &direction) {
 
         ball.setPosition(collisionPoint);
         // when a ball collides it might be colliding with two sides -> it is in a corner
-        if (isBallInHole()) {
+        if (isInHole(ball.getPosition())) {
             // if the ball is in a hole we reset it to the starting position
             resetBallPosition();
             std::cout << "Ball is in hole" << std::endl;
@@ -199,11 +204,11 @@ void Table::hitBall(double power, const Point &direction) {
 }
 
 // if the ball is colliding with two sides, then it is in a corner
-bool Table::isBallInHole() const {
+bool Table::isInHole(const Point &position) const {
     uint8_t count = 0;
     for (int i = 0; i < 4; i++) {
         if (compareDoubles(
-                sides[i].getA() * ball.getPosition().x + sides[i].getB() * ball.getPosition().y + sides[i].getC(), 0)) {
+                sides[i].getA() * position.x + sides[i].getB() * position.y + sides[i].getC(), 0)) {
             count++;
         }
     }
@@ -283,6 +288,10 @@ void Table::setStartingPosition(const Point &startingPosition) {
     } else {
         throw std::invalid_argument("Starting position is not in table");
     }
+}
+
+void Table::setCurrentAsStarting() {
+    this->startingPosition = ball.getPosition();
 }
 
 void Table::setBallRadius(double radius) {

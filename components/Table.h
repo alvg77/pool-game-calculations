@@ -29,7 +29,7 @@ private:
     bool isInTable(const Point &currentPosition) const;
     bool compareDoubles(double a, double b) const; // computers cannot do math
     bool isRectangle(const std::vector<Point> points) const;
-    bool isBallInHole() const;
+    bool isInHole(const Point &position) const;
 
     std::pair<Vector, Line> findCollision(const Vector &directionVector) const;
 public:
@@ -69,6 +69,7 @@ public:
 
         os << "Ball centre: " << table.retrievePoint(table.ball.getPosition()) << std::endl;
         os << "Ball diameter: " << table.ball.getRadius() * 2 << std::endl;
+        os << "Starting position: " << table.retrievePoint(table.startingPosition) << std::endl;
 
         return os;
     }
@@ -93,7 +94,7 @@ public:
         return in;
     }
 
-    inline friend std::istream& operator>>(std::istream& in, Table& table);
+    void setCurrentAsStarting();
 };
 
 Point symmetric(const Point &p1, const Line &l);
